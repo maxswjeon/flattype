@@ -24,6 +24,7 @@
     "@vitest/coverage-c8": "^0.29.8",
     "rimraf": "^4.4.1",
     "typescript": "^5.0.3",
+    "vite": "^4.2.1",
     "vitest": "^0.29.8"
   }
 }
