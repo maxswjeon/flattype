@@ -5,16 +5,6 @@ type FlatData = {
   };
 };
 
-const handler: ProxyHandler<Flat> = {
-  get(target, property) {
-    return target[property as keyof Flat];
-  },
-  set(target, property, value) {
-    target[property as keyof Flat] = value;
-    return true;
-  },
-};
-
 export default class Flat {
   private flat: FlatData;
   private type: "object" | "array";
@@ -27,10 +17,6 @@ export default class Flat {
       this.flat = Flat.fromObject(data);
       this.type = "object";
     }
-  }
-
-  static from(data: object) {
-    return new Proxy(new Flat(data), handler);
   }
 
   // rome-ignore lint/suspicious/noExplicitAny: this is a library that can be used with any type
@@ -99,14 +85,6 @@ export default class Flat {
     return flat;
   }
 
-  getData() {
-    if (this.type === "object") {
-      return this.toObject();
-    } else {
-      return this.toArray();
-    }
-  }
-
   private toObject(prefix = "") {
     // rome-ignore lint/suspicious/noExplicitAny: this is a library that can be used with any type
     const result: any = {};
@@ -158,5 +136,98 @@ export default class Flat {
     }
 
     return array;
+  }
+
+  static from(data: object) {
+    return new Flat(data);
+  }
+
+  getData() {
+    if (this.type === "object") {
+      return this.toObject();
+    } else {
+      return this.toArray();
+    }
+  }
+
+  exist(key: string) {
+    return key in this.flat;
+  }
+
+  get(key: string) {
+    if (!(key in this.flat)) {
+      return undefined;
+    }
+
+    const { type, value } = this.flat[key];
+    if (type === "value") {
+      return value;
+    }
+    if (type === "array") {
+      return this.toArray(value);
+    }
+    if (type === "object") {
+      return this.toObject(value);
+    }
+  }
+
+  delete(key: string): Flat {
+    Object.keys(this.flat).forEach((flatKey) => {
+      if (flatKey.startsWith(key)) {
+        delete this.flat[flatKey];
+      }
+    });
+
+    return this;
+  }
+
+  set(key: string, value: string | object) {
+    if (this.exist(key)) {
+      this.delete(key);
+    }
+    if (Array.isArray(value)) {
+      this.flat[key] = {
+        type: "array",
+        value: `${key}__`,
+      };
+      this.flat = { ...this.flat, ...Flat.fromArray(value, `${key}__`) };
+    } else if (typeof value === "object") {
+      this.flat[key] = {
+        type: "object",
+        value: `${key}__`,
+      };
+      this.flat = { ...this.flat, ...Flat.fromObject(value, `${key}__`) };
+    } else {
+      this.flat[key] = {
+        type: "value",
+        value,
+      };
+    }
+
+    return this;
+  }
+
+  append(key: string, value: string | object) {
+    if (key !== "" && !this.exist(key)) {
+      throw new Error(`Key ${key} does not exist`);
+    }
+
+    if (key !== "" && this.flat[key].type !== "array") {
+      throw new Error(`Key ${key} is not an array`);
+    }
+
+    if (key === "" && this.type === "object") {
+      throw new Error("Flat is not an array");
+    }
+
+    const index = Object.keys(this.flat).filter(
+      (flatKey) =>
+        flatKey.startsWith(key) && !flatKey.slice(key.length).includes("__")
+    ).length;
+
+    const newKey = key === "" ? index.toString() : `${key}__${index}`;
+    this.set(newKey, value);
+
+    return this;
   }
 }
