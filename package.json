@@ -1,5 +1,18 @@
 {
   "name": "flattype",
+  "version": "0.1.0",
+  "description": "A simple library for creating flat types",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maxswjeon/flattype.git"
+  },
+  "author": "Sangwan Jeon <maxswjeon@codingbear.kr",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/maxswjeon/flattype/issues"
+  },
+  "homepage": "https://github.com/maxswjeon/flattype",
   "scripts": {
     "build": "tsc",
     "clean": "rimraf dist",
