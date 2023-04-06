@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { from } from "../../src/FlatType";
+import { construct } from "../../src/FlatType";
 
-describe("serialize - basic", () => {
-  it("should serialize basic object", () => {
+describe("construct - basic", () => {
+  it("should construct basic object", () => {
     expect(
-      from({
+      construct({
         foo: "bar",
       })
     ).toMatchObject({
@@ -15,8 +15,8 @@ describe("serialize - basic", () => {
     });
   });
 
-  it("should serialize basic array", () => {
-    expect(from(["foo", "bar"])).toMatchObject({
+  it("should construct basic array", () => {
+    expect(construct(["foo", "bar"])).toMatchObject({
       "0": {
         type: "value",
         value: "foo",

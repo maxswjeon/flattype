@@ -1,16 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { from } from "../../src/FlatType";
+import { construct } from "../../src/FlatType";
 
-describe("serialize - mixed", () => {
-  it("should serialize mixed object (object with arrays)", () => {
+describe("destruct - mixed", () => {
+  it("should construct mixed object (object with arrays)", () => {
     expect(
-      from({
+      construct({
         foo: ["bar", "baz"],
       })
     ).toMatchObject({
       foo: {
         type: "array",
-        value: "foo__0",
+        value: "foo__",
       },
       foo__0: {
         type: "value",
@@ -23,9 +23,9 @@ describe("serialize - mixed", () => {
     });
   });
 
-  it("should serialize mixed array (array with object)", () => {
+  it("should construct mixed array (array with object)", () => {
     expect(
-      from([
+      construct([
         {
           foo: "bar",
           baz: "qux",
@@ -38,7 +38,7 @@ describe("serialize - mixed", () => {
     ).toMatchObject({
       "0": {
         type: "object",
-        value: "0__foo",
+        value: "0__",
       },
       "0__foo": {
         type: "value",
@@ -50,7 +50,7 @@ describe("serialize - mixed", () => {
       },
       "1": {
         type: "object",
-        value: "1__foo",
+        value: "1__",
       },
       "1__foo": {
         type: "value",

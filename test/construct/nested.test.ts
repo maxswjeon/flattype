@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { from } from "../../src/FlatType";
+import { construct } from "../../src/FlatType";
 
-describe("serialize - nested", () => {
-  it("should serialize nested object", () => {
+describe("construct - nested", () => {
+  it("should construct nested object", () => {
     expect(
-      from({
+      construct({
         foo: {
           bar: "baz",
         },
@@ -12,7 +12,7 @@ describe("serialize - nested", () => {
     ).toMatchObject({
       foo: {
         type: "object",
-        value: "foo__bar",
+        value: "foo__",
       },
       foo__bar: {
         type: "value",
@@ -21,11 +21,11 @@ describe("serialize - nested", () => {
     });
   });
 
-  it("should serialize nested array", () => {
-    expect(from([["foo", "bar"], ["baz"]])).toMatchObject({
+  it("should construct nested array", () => {
+    expect(construct([["foo", "bar"], ["baz"]])).toMatchObject({
       "0": {
         type: "array",
-        value: "0__0",
+        value: "0__",
       },
       "0__0": {
         type: "value",
@@ -37,7 +37,7 @@ describe("serialize - nested", () => {
       },
       "1": {
         type: "array",
-        value: "1__0",
+        value: "1__",
       },
       "1__0": {
         type: "value",
