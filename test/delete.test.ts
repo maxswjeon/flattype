@@ -92,4 +92,129 @@ describe("delete(key: string) function", () => {
       foo: {},
     });
   });
+
+  it("should delete element in array on root", () => {
+    const flat = Flat.from(["foo", "bar", "baz"]);
+    flat.delete("1");
+    expect(flat.getData()).toEqual(["foo", "baz"]);
+  });
+
+  it("should delete element in array on nested", () => {
+    const flat = Flat.from({
+      foo: ["bar", "baz", "qux"],
+    });
+    flat.delete("foo__1");
+    expect(flat.getData()).toEqual({
+      foo: ["bar", "qux"],
+    });
+  });
+
+  it("should delete element in array with objects", () => {
+    const flat = Flat.from({
+      foo: [
+        {
+          bar: "baz",
+        },
+        {
+          bar: "qux",
+        },
+        {
+          bar: "tes",
+        },
+      ],
+    });
+
+    flat.delete("foo__1");
+    expect(flat.getData()).toEqual({
+      foo: [
+        {
+          bar: "baz",
+        },
+        {
+          bar: "tes",
+        },
+      ],
+    });
+  });
+
+  it("should delete element in array with complex objects", () => {
+    const flat = Flat.from({
+      foo: [
+        {
+          bar: {
+            baz: "qux",
+          },
+        },
+        {
+          bar: {
+            baz: "tes",
+          },
+        },
+        {
+          bar: {
+            baz: "foo",
+          },
+        },
+      ],
+    });
+
+    flat.delete("foo__1");
+    expect(flat.getData()).toEqual({
+      foo: [
+        {
+          bar: {
+            baz: "qux",
+          },
+        },
+        {
+          bar: {
+            baz: "foo",
+          },
+        },
+      ],
+    });
+  });
+
+  it("should able to append new value after delete on complex array", () => {
+    const flat = Flat.from({
+      foo: [
+        {
+          bar: {
+            baz: "qux",
+          },
+        },
+        {
+          bar: {
+            baz: "tes",
+          },
+        },
+        {
+          bar: {
+            baz: "foo",
+          },
+        },
+      ],
+    });
+
+    flat.delete("foo__1");
+    flat.append("foo", {
+      bar: {
+        baz: "tar",
+      },
+    });
+    expect(flat.getData()).toEqual({
+      foo: [
+        {
+          bar: {
+            baz: "qux",
+          },
+        },
+        {
+          bar: {
+            baz: "tar",
+          },
+        },
+      ],
+    });
+  });
 });
