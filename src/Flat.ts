@@ -138,6 +138,32 @@ export default class Flat {
     return array;
   }
 
+  private static createNextKey(
+    key: string,
+    index: number,
+    depth: number
+  ): string {
+    const keys = key.split("__");
+
+    if (keys.length < depth) {
+      return key;
+    }
+
+    const prevIndex = Number(keys[depth - 1]);
+
+    if (prevIndex < index) {
+      return key;
+    }
+
+    keys[depth - 1] = (prevIndex - 1).toString();
+
+    return keys.join("__");
+  }
+
+  static getParentKey(key: string): string {
+    return key.split("__").slice(0, -1).join("__");
+  }
+
   static from(data: object) {
     return new Flat(data);
   }
@@ -177,6 +203,39 @@ export default class Flat {
         delete this.flat[flatKey];
       }
     });
+
+    const parent = Flat.getParentKey(key);
+    if (
+      (parent === "" && this.type === "array") ||
+      this.flat[parent]?.type === "array"
+    ) {
+      const removedIndex = Number(
+        key.slice(parent.length === 0 ? 0 : parent.length + 2)
+      );
+      const updatedDepth = key.split("__").length;
+
+      Object.keys(this.flat).forEach((flatKey) => {
+        const newKey = Flat.createNextKey(flatKey, removedIndex, updatedDepth);
+
+        const type = this.flat[flatKey].type;
+        const value = this.flat[flatKey].value;
+        delete this.flat[flatKey];
+
+        if (type === "value") {
+          this.flat[newKey] = {
+            type,
+            value,
+          };
+        } else {
+          const newValue = value.slice(flatKey.length);
+
+          this.flat[newKey] = {
+            type,
+            value: newKey + newValue,
+          };
+        }
+      });
+    }
 
     return this;
   }
