@@ -279,6 +279,17 @@ export default class Flat {
       throw new Error("Flat is not an array");
     }
 
+    const subKeys = Object.keys(this.flat).filter(
+      (flatKey) => flatKey.startsWith(key) && flatKey !== key
+    );
+
+    if (subKeys.length === 0) {
+      const newKey = key === "" ? "0" : `${key}__0`;
+      this.set(newKey, value);
+
+      return this;
+    }
+
     const index = Object.keys(this.flat).filter(
       (flatKey) =>
         flatKey.startsWith(key) && !flatKey.slice(key.length).includes("__")
