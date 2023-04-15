@@ -204,6 +204,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@maxswjeon/flattype@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@maxswjeon/flattype@workspace:."
+  dependencies:
+    "@vitest/coverage-c8": ^0.29.8
+    rimraf: ^4.4.1
+    typescript: ^5.0.3
+    vite: ^4.2.1
+    vitest: ^0.29.8
+  languageName: unknown
+  linkType: soft
+
 "@npmcli/fs@npm:^2.1.0":
   version: 2.1.2
   resolution: "@npmcli/fs@npm:2.1.2"
@@ -805,18 +817,6 @@ __metadata:
   checksum: 07955e357348f34660bde7920783204ff5a26ac2cafcaa28bace494027158a97b9f56faaf2d89a6106211a8174db650dd9f503f9c0d526b1202d5554a00b9095
   languageName: node
   linkType: hard
-
-"flattype@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "flattype@workspace:."
-  dependencies:
-    "@vitest/coverage-c8": ^0.29.8
-    rimraf: ^4.4.1
-    typescript: ^5.0.3
-    vite: ^4.2.1
-    vitest: ^0.29.8
-  languageName: unknown
-  linkType: soft
 
 "foreground-child@npm:^2.0.0":
   version: 2.0.0
