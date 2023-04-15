@@ -12,10 +12,26 @@ describe("append(key: string, value: any) function", () => {
     });
   });
 
+  it("should append value by key on empty array", () => {
+    const flat = Flat.from({
+      foo: [],
+    });
+
+    expect(flat.append("foo", "baz").getData()).toEqual({
+      foo: ["baz"],
+    });
+  });
+
   it("should append value by key on root", () => {
     const flat = Flat.from(["foo"]);
 
     expect(flat.append("", "baz").getData()).toEqual(["foo", "baz"]);
+  });
+
+  it("should append value by key on root when root is empty array", () => {
+    const flat = Flat.from([]);
+
+    expect(flat.append("", "baz").getData()).toEqual(["baz"]);
   });
 
   it("should throw an error when tried to append on non existing key", () => {
