@@ -1,8 +1,10 @@
 {
   "name": "flattype",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "A simple library for creating flat types",
-  "main": "dist/index.js",
+  "main": "dist/Flat.js",
+  "module": "dist/Flat.js",
+  "types": "dist/Flat.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/maxswjeon/flattype.git"

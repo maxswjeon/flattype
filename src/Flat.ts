@@ -289,4 +289,8 @@ export default class Flat {
 
     return this;
   }
+
+  getKeys() {
+    return Object.keys(this.flat);
+  }
 }
