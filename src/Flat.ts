@@ -302,6 +302,6 @@ export default class Flat {
   }
 
   getKeys() {
-    return Object.keys(this.flat);
+    return Object.keys(this.flat).sort();
   }
 }
