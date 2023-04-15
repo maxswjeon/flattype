@@ -1,5 +1,6 @@
 {
   "name": "flattype",
+  "version": "0.3.2",
   "description": "A simple library for creating flat types",
   "main": "dist/Flat.js",
   "module": "dist/Flat.js",
