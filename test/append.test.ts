@@ -22,6 +22,32 @@ describe("append(key: string, value: any) function", () => {
     });
   });
 
+  it("should append value by key on empty array twice", () => {
+    const flat = Flat.from({
+      foo: [],
+    });
+
+    expect(flat.append("foo", "baz").append("foo", "bar").getData()).toEqual({
+      foo: ["baz", "bar"],
+    });
+  });
+
+  it("should append value by key on empty array three times", () => {
+    const flat = Flat.from({
+      foo: [],
+    });
+
+    expect(
+      flat
+        .append("foo", "baz")
+        .append("foo", "bar")
+        .append("foo", "tar")
+        .getData()
+    ).toEqual({
+      foo: ["baz", "bar", "tar"],
+    });
+  });
+
   it("should append value by key on root", () => {
     const flat = Flat.from(["foo"]);
 
@@ -32,6 +58,23 @@ describe("append(key: string, value: any) function", () => {
     const flat = Flat.from([]);
 
     expect(flat.append("", "baz").getData()).toEqual(["baz"]);
+  });
+
+  it("should append value by key on root when root is empty array twice", () => {
+    const flat = Flat.from([]);
+
+    expect(flat.append("", "baz").append("", "bar").getData()).toEqual([
+      "baz",
+      "bar",
+    ]);
+  });
+
+  it("should append value by key on root when root is empty array three times", () => {
+    const flat = Flat.from([]);
+
+    expect(
+      flat.append("", "baz").append("", "bar").append("", "tar").getData()
+    ).toEqual(["baz", "bar", "tar"]);
   });
 
   it("should throw an error when tried to append on non existing key", () => {

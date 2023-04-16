@@ -279,23 +279,22 @@ export default class Flat {
       throw new Error("Flat is not an array");
     }
 
-    const subKeys = Object.keys(this.flat).filter(
-      (flatKey) => flatKey.startsWith(key) && flatKey !== key
-    );
+    const lastIndex = Object.keys(this.flat).reduce((lastIndex, flatKey) => {
+      if (flatKey.startsWith(key) && flatKey !== key) {
+        const subKey = flatKey.slice(key.length + (key === "" ? 0 : 2));
+        const indexSeparator = subKey.indexOf("__");
+        const index = parseInt(
+          indexSeparator === -1 ? subKey : subKey.slice(0, indexSeparator),
+          10
+        );
+        return Math.max(index, lastIndex);
+      }
+      return lastIndex;
+    }, -1);
 
-    if (subKeys.length === 0) {
-      const newKey = key === "" ? "0" : `${key}__0`;
-      this.set(newKey, value);
-
-      return this;
-    }
-
-    const index = Object.keys(this.flat).filter(
-      (flatKey) =>
-        flatKey.startsWith(key) && !flatKey.slice(key.length).includes("__")
-    ).length;
-
-    const newKey = key === "" ? index.toString() : `${key}__${index}`;
+    // Create new key for the value to append
+    const newKey =
+      key === "" ? (lastIndex + 1).toString() : `${key}__${lastIndex + 1}`;
     this.set(newKey, value);
 
     return this;
