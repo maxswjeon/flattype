@@ -197,16 +197,23 @@ describe("delete(key: string) function", () => {
     });
 
     flat.delete("foo__1");
+
     flat.append("foo", {
       bar: {
         baz: "tar",
       },
     });
+
     expect(flat.getData()).toEqual({
       foo: [
         {
           bar: {
             baz: "qux",
+          },
+        },
+        {
+          bar: {
+            baz: "foo",
           },
         },
         {
