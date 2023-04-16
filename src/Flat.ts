@@ -242,6 +242,10 @@ export default class Flat {
 
   set(key: string, value: string | object) {
     if (this.exist(key)) {
+      if (this.flat[key].type === "value" && typeof value === "string") {
+        this.flat[key].value = value;
+        return this;
+      }
       this.delete(key);
     }
     if (Array.isArray(value)) {

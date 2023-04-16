@@ -83,4 +83,32 @@ describe("set(key: string, value: string | object) function", () => {
 
     expect(flat.get("baz")).toEqual(["qux", "gar"]);
   });
+
+  it("should update value after append", () => {
+    const flat = Flat.from({
+      a: "",
+      b: "",
+      c: "",
+      d: "",
+      e: "",
+      f: [],
+      g: [],
+    });
+
+    flat.append("f", "");
+    flat.append("f", "");
+    flat.append("f", "");
+
+    flat.set("f__1", "test");
+
+    expect(flat.getData()).toEqual({
+      a: "",
+      b: "",
+      c: "",
+      d: "",
+      e: "",
+      f: ["", "test", ""],
+      g: [],
+    });
+  });
 });
